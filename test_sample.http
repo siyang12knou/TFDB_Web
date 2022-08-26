@@ -1,0 +1,59 @@
+# Test your FastAPI endpoints
+
+GET http://127.0.0.1:8080/sample
+Accept: application/json
+
+###
+
+POST http://127.0.0.1:8080/sample/new
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id_sample": 1,
+  "id_project": 1,
+  "Date": "2020-10-06",
+  "id_experimenter": 1,
+  "Target_Compo": "",
+  "P_B": "rl;f'efkef",
+  "P_LC": "",
+  "Deposition_temp": 0,
+  "Anneal_Temp": 0,
+  "Anneal_Time": 0,
+  "Gas": " ",
+  "P_Gas": "",
+  "Q_Gas": 0,
+  "Gun_Angle": "",
+  "Substrate_Height": 0,
+  "Rotation_Speed": 0,
+  "Sputtering_Type": "Sequential",
+  "Power": "",
+  "Deposition_Time": 0,
+  "Target_Thick": 0,
+  "Sample_Shape": "",
+  "Silicon_Thick": 0,
+  "Adh_Compo": "",
+  "Adh_Pow": "",
+  "Adh_time": 0,
+  "Adh_Rotation": 0,
+  "Substrate": "None",
+  "Substrate_Thick": 0,
+  "Comment": "Dummy data"
+}
+
+###
+
+GET http://127.0.0.1:8080/sample/1
+Accept: application/json
+
+###
+
+DELETE http://127.0.0.1:8080/sample/1
+Accept: application/json
+
+###
+
+GET http://127.0.0.1:8080/sample
+Accept: application/json
+
+###

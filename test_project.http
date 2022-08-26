@@ -1,0 +1,63 @@
+# Test your FastAPI endpoints
+
+GET http://127.0.0.1:8000/
+Accept: application/json
+
+###
+
+POST http://127.0.0.1:8000/project
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id_project": 1,
+  "project_name": "project 1",
+  "project_description": "첫 번째 프로젝트"
+}
+
+###
+
+POST http://127.0.0.1:8000/project
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id_project": 2,
+  "project_name": "project 2",
+  "project_description": "두 번째 프로젝트"
+}
+
+###
+
+
+GET http://127.0.0.1:8000/project
+Accept: application/json
+
+###
+
+GET http://127.0.0.1:8000/project/1
+Accept: application/json
+
+###
+
+PUT http://127.0.0.1:8000/project/1
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id_project": 1,
+  "project_name": "project 1",
+  "project_description": "첫 번째 프로젝트의 설명"
+}
+
+###
+
+DELETE http://127.0.0.1:8000/project/1
+Accept: application/json
+
+###
+
+DELETE http://127.0.0.1:8000/project
+Accept: application/json
+
+###

@@ -1,0 +1,31 @@
+# Test your FastAPI endpoints
+
+POST http://127.0.0.1:8080/user/signup
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": "sample@example.com",
+  "password": "password string",
+  "name": "100aquinas",
+  "email": "sample_other@example.com",
+  "tel": "010-3104-5284",
+  "type": "USER",
+  "enabled": 1,
+  "deleted": 0,
+  "created_date": "2022-06-23 16:14:11",
+  "modified_date": "2022-06-23 16:14:11"
+}
+
+###
+
+POST http://127.0.0.1:8080/user/signin
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": "sample@example.com",
+  "password": "password string"
+}
+
+###

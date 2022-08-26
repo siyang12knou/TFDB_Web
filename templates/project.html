@@ -1,0 +1,56 @@
+{% extends "home.html" %}
+{% block project_container %}
+<main class="container">
+    <hr>
+    <section class="container-fluid">
+        <form method="post">
+            <div class="col-auto">
+                <div class="input-group mb-3">
+                    <input type="text" name="project_name"
+                           value="{{ project_name }}" class="form-control"
+                           aria-label="Project Name"
+                           aria-describedby="button-addon2"/>
+                    <input type="text" name="project_description"
+                           value="{{ project_description }}" class="form-control"
+                           aria-label="Description"
+                           aria-describedby="button-addon2"/>
+                    <button class="btn btn-outline-primary" type="submit" id="button-addon2" data-mdb-ripple-color="dark">
+                        Add Project
+                    </button>
+                </div>
+            </div>
+        </form>
+    </section>
+    {% if project %}
+    <article class="card container-fluid">
+        <br/>
+        <h4>Project ID: {{ project.id_project }} </h4>
+        <p>
+            <strong>
+                Name: {{ project.project_name }}
+            </strong>
+        </p>
+        <p>
+            <strong>
+                Description: {{ project.project_description }}
+            </strong>
+        </p>
+    </article>
+    {% else %}
+    <section class="container-fluid">
+        <h2 align="center">Project List</h2>
+        <br>
+        <div class="card">
+            <ul class="list-group list-group-flush">
+                {% for project in project_list %}
+                <li class="list-group-item">
+                    {{ loop.index }}. <a href="/project/{{loop.index}}"> {{ project.project_name }} </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </section>
+</main>
+
+{% endblock %}
