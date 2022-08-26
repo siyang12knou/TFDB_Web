@@ -1,6 +1,4 @@
 import datetime
-from typing import Optional
-
 from sqlmodel import JSON, SQLModel, Field, Column
 
 
@@ -8,34 +6,35 @@ class Sample(SQLModel, table=True):
     id_sample: Field(default=None, primary_key=True)
     id_project: int
     Date: datetime.date
-    id_experimenter: Optional[int]
+    id_experimenter: int
     Target_Compo: str
-    P_B: Optional[str]
-    P_LC: Optional[str]
-    Deposition_temp: Optional[int]
-    Anneal_Temp: Optional[int]
-    Anneal_Time: Optional[int]
-    Gas: Optional[str]
-    P_Gas: Optional[str]
-    Q_Gas: Optional[int]
-    Gun_Angle: Optional[str]
-    Substrate_Height: Optional[int]
-    Rotation_Speed: Optional[int]
-    Sputtering_Type: Optional[str]
-    Power: Optional[str]
-    Deposition_Time: Optional[int]
-    Target_Thick: Optional[int]
-    Sample_Shape: Optional[str]
-    Silicon_Thick: Optional[int]
-    Adh_Compo: Optional[str]
-    Adh_Pow: Optional[str]
-    Adh_time: Optional[int]
-    Adh_Rotation: Optional[int]
-    Substrate: Optional[str]
-    Substrate_Thick: Optional[int]
-    Comment: Optional[str]
+    P_B: str
+    P_LC: str
+    Deposition_temp: int
+    Anneal_Temp: int
+    Anneal_Time: int
+    Gas: str
+    P_Gas: str
+    Q_Gas: int
+    Gun_Angle: str
+    Substrate_Height: int
+    Rotation_Speed: int
+    Sputtering_Type: str
+    Power: str
+    Deposition_Time: int
+    Target_Thick: int
+    Sample_Shape: str
+    Silicon_Thick: int
+    Adh_Compo: str
+    Adh_Pow: str
+    Adh_time: int
+    Adh_Rotation: int
+    Substrate: str
+    Substrate_Thick: int
+    Comment: str
 
     class Config:
+        arbitrary_types_allowed = True
         schema_extra = {
             "examples": {
                 "id_sample": 32,
@@ -69,5 +68,4 @@ class Sample(SQLModel, table=True):
                 "Comment": "Dummy data"
             }
         }
-
 
