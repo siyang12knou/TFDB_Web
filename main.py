@@ -15,8 +15,8 @@ app.include_router(sample_router, prefix="/sample")
 
 
 @app.on_event("startup")
-def on_startup():
-    conn()
+async def on_startup():
+    await conn()
 
 
 @app.get("/")

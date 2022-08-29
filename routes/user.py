@@ -1,5 +1,7 @@
-from fastapi import APIRouter, HTTPException, status
-from models.user import User, UserSignIn
+from fastapi import APIRouter, HTTPException, status, Depends
+from database.connection import get_session
+from models.user import User, UserSignIn, UserOut
+from models.result_message import ResultMessage
 
 user_router = APIRouter(
     tags=["User"]
@@ -9,35 +11,36 @@ users = {}
 
 
 @user_router.post("/signup")
-async def signup_user(data: User) -> dict:
-    if data.id in users:
+async def signup_user(data: User, session=Depends(get_session)) -> ResultMessage:
+    user_exist = User.find_one(User.id == data.id)
+    if not user_exist:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="User with supplied username exists"
         )
 
-    users[data.id] = data
+    await session.add(data)
+    await session.commit()
+    await session.refresh(data)
 
-    return {
-        "message": "User successfully registered!"
-    }
+    return ResultMessage(message="User successfully registered!")
 
 
 @user_router.post("/signin")
-async def signin_user(user: UserSignIn) -> dict:
-    if user.id not in users:
+async def signin_user(user: UserSignIn) -> ResultMessage:
+    user_exist = User.find_one(User.id == user.id)
+
+    if not user_exist:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User does not exist"
         )
 
-    if users[user.id].password != user.password:
+    if user_exist.password != user.password:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Wrong credentials passed"
         )
 
-    return {
-        "message": "User signed in successfully"
-    }
+    return ResultMessage(message="User signed in successfully", data=UserOut.as_user(user_exist))
 

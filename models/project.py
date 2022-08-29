@@ -5,7 +5,7 @@ from sqlmodel import SQLModel, Field
 
 
 class Project(SQLModel, table=True):
-    id_project: Optional[int] = Field(default=None, primary_key=True)
+    id_project: int = Field(default=None, primary_key=True)
     project_name: str
     project_description: str
 
