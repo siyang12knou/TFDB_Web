@@ -3,7 +3,7 @@ from sqlmodel import JSON, SQLModel, Field, Column
 
 
 class Sample(SQLModel, table=True):
-    id_sample: Field(default=None, primary_key=True)
+    id_sample: int = Field(default=None, primary_key=True)
     id_project: int
     Date: datetime.date
     id_experimenter: int
