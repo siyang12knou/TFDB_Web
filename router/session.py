@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, status, Depends, Form
 from fastapi.security import OAuth2PasswordRequestForm
 
-from auth.authenticate import authenticate, oauth2_scheme
+from auth.authenticate import authenticate
 from auth.hash_password import verify_hash
 from auth.jwt_handler import create_access_token
 from config.db import get_session
