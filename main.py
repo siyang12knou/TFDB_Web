@@ -1,22 +1,24 @@
+import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
-from database.connection import conn
-from routes.project import project_router
-from routes.user import user_router
-from routes.sample import sample_router
 
-import uvicorn
+from config.db import conn_db
+from router.project import project_router
+from router.sample import sample_router
+from router.session import session_router
+from router.user import user_router
 
 app = FastAPI()
 
-app.include_router(project_router, prefix="/project")
+app.include_router(session_router, prefix="/session")
 app.include_router(user_router, prefix="/user")
+app.include_router(project_router, prefix="/project")
 app.include_router(sample_router, prefix="/sample")
 
 
 @app.on_event("startup")
 async def on_startup():
-    await conn()
+    await conn_db()
 
 
 @app.get("/")

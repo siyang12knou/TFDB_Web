@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Body, HTTPException, status, Depends
 from sqlmodel import select
-from models.sample import Sample
-from database.connection import get_session
+from model.sample import Sample
+from config.db import get_session
 from typing import List
+from auth.authenticate import authenticate
 
 sample_router = APIRouter(
     tags=["Samples"]

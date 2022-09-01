@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Path, HTTPException, status, Request, Depends
 from fastapi.templating import Jinja2Templates
-from models.project import Project
-from models.project_item import ProjectItems
+from model.project import Project
+from model.project_item import ProjectItems
 
 project_router = APIRouter()
 project_list = []

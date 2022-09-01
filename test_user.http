@@ -19,13 +19,11 @@ Content-Type: application/json
 
 ###
 
-POST http://127.0.0.1:8080/user/signin
+POST http://127.0.0.1:8080/session/login
 Accept: application/json
-Content-Type: application/json
+Content-Type: application/x-www-form-urlencoded
 
-{
-  "id": "sample@example.com",
-  "password": "password string"
-}
+username=admin
+&password=Kailos0601!
 
 ###

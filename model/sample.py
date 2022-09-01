@@ -1,5 +1,6 @@
 import datetime
-from sqlmodel import JSON, SQLModel, Field, Column
+
+from sqlmodel import SQLModel, Field
 
 
 class Sample(SQLModel, table=True):
