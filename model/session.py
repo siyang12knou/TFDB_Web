@@ -23,6 +23,6 @@ class SessionInfo(BaseModel):
 
     @classmethod
     def as_dict(cls, info: dict):
-        return cls(id=info.get("id"), name=info.get("name"), type=info.get("type"))
+        return cls(id=info.get("id", ""), name=info.get("name", ""), type=info.get("type", ""))
 
 

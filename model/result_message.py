@@ -6,9 +6,9 @@ from fastapi.encoders import jsonable_encoder
 
 
 class ResultMessage(BaseModel):
-    result: bool
-    message: str
-    data: str
+    result: bool = True
+    message: str = ""
+    data: str = None
 
     class Config:
         schema_extra = {

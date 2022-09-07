@@ -5,7 +5,7 @@ from auth.authenticate import authenticate
 from auth.hash_password import verify_hash
 from auth.jwt_handler import create_access_token
 from config.db import get_session
-from config.redis import get_redis_conn
+from config.redis import exist_redis, set_dict_redis, get_dict_redis, delete_redis
 from model.result_message import ResultMessage
 from model.session import SessionInfo
 from model.user import User
@@ -19,10 +19,8 @@ session_router = APIRouter(
 
 @session_router.get("/current")
 async def get_current(user_id: str = Depends(authenticate)) -> SessionInfo:
-    redis_conn = get_redis_conn();
-    if redis_conn.exists(user_id):
-        session_dict = redis_conn.hgetall(user_id)
-        return SessionInfo.as_dict(session_dict)
+    if exist_redis(user_id):
+        return SessionInfo.as_dict(get_dict_redis(user_id))
 
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
@@ -40,10 +38,9 @@ async def login_user(user: OAuth2PasswordRequestForm = Depends(), session=Depend
             detail="Wrong credentials passed"
         )
 
-    redis_conn = get_redis_conn()
     access_token = create_access_token(user_exist.id)
     session_info = SessionInfo.as_user(user_exist)
-    redis_conn.hmset(user_exist.id, session_info.__dict__)
+    set_dict_redis(user_exist.id, session_info.dict())
 
     token: TokenResponse = TokenResponse(token_type="Bearer", access_token=access_token)
     return ResultMessage.as_data(message="User login successfully", data=token)
@@ -51,8 +48,7 @@ async def login_user(user: OAuth2PasswordRequestForm = Depends(), session=Depend
 
 @session_router.post("/logout")
 async def logout_user(user_id: str = Depends(authenticate)) -> ResultMessage:
-    redis_conn = get_redis_conn()
-    redis_conn.delete(user_id)
+    delete_redis(user_id)
 
     return ResultMessage(message="User logout successfully")
 
