@@ -1,13 +1,21 @@
-from typing import Optional
-
 from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    SECRET_KEY: Optional[str] = None
-    DB_URL: Optional[str] = f'mysql+aiomysql://kailoslab:Kailos0601!@localhost:3306/tfdb?charset=utf8mb4'
-    REDIS_HOST: Optional[str] = 'localhost'
-    REDIS_PORT: Optional[int] = 6379
+    SECRET_KEY: str
+
+    MYSQL_HOST: str
+    MYSQL_PORT: int
+    MYSQL_USER: str
+    MYSQL_PWD: str
+
+    SFTP_HOST: str
+    SFTP_PORT: int
+    SFTP_USER: str
+    SFTP_PWD: str
+
+    REDIS_HOST: str
+    REDIS_PORT: int
 
     class Config:
         env_file = ".env"

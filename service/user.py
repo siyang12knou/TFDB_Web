@@ -34,7 +34,7 @@ async def create_user(user: User, session: AsyncSession) -> User:
     if user.password:
         user.password = create_hash(user.password.strip())
     if not user.type:
-        user.type = "USER"
+        user.role = "[\"Visitor\"]"
     session.add(user)
     await session.commit()
     await session.refresh(user)
@@ -76,7 +76,7 @@ async def init_user(session: AsyncSession):
         admin = User()
         admin.id = "admin"
         admin.password = "Kailos0601!"
-        admin.type = "ADMIN"
+        admin.role = "[\"ADMIN\"]"
         admin.name = "Admin"
         admin.email = "kailoslab@gmail.com"
         await create_user(admin, session)

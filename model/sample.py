@@ -43,7 +43,7 @@ class Sample(SQLModel, table=True):
                 "Date": "2020-10-06",
                 "id_experimenter": 1,
                 "Target_Compo": "",
-                "P_B": "rl;f'efkef",
+                "P_B": "",
                 "P_LC": "",
                 "Deposition_temp": 0,
                 "Anneal_Temp": 0,

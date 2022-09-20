@@ -10,7 +10,7 @@ class User(SQLModel, SystemInfo, table=True):
 
     id: str = Field(default=None, primary_key=True)
     name: str
-    type: str
+    role: str
     password: str
     email: EmailStr
     tel: Optional[
@@ -19,7 +19,6 @@ class User(SQLModel, SystemInfo, table=True):
             regex=r"^\d{3}-\d{3,4}-\d{4}$",
         )
     ]
-    type: str
 
     class Config:
         schema_extra = {
@@ -29,7 +28,7 @@ class User(SQLModel, SystemInfo, table=True):
                 "name": "100aquinas",
                 "email": "sample_other@example.com",
                 "tel": "010-3104-5284",
-                "type": "USER",
+                "role": "[\"TFDB\", \"Researcher\"]",
                 "enabled": 1,
                 "deleted": 0,
                 "created_date": "2022-06-23 16:14:11",
@@ -41,7 +40,7 @@ class User(SQLModel, SystemInfo, table=True):
 class UserOut(BaseModel):
     id: str
     name: str
-    type: str
+    role: str
     email: EmailStr
     tel: Optional[
         constr(
@@ -57,13 +56,13 @@ class UserOut(BaseModel):
                 "name": "100aquinas",
                 "email": "sample_other@example.com",
                 "tel": "010-3104-5284",
-                "type": "USER",
+                "role": "[\"TFDB\", \"WORKER\"]",
             }
         }
 
     @classmethod
     def as_user(cls, user: User):
-        return cls(id=user.id, name=user.name, email=user.email, tel=user.tel, type=user.type)
+        return cls(id=user.id, name=user.name, email=user.email, tel=user.tel, role=user.role)
 
 
 class PasswordIn(BaseModel):

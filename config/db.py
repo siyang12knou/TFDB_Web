@@ -2,10 +2,11 @@ from sqlmodel import SQLModel
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
+from service.secure import decrypt
 from config.settings import Settings
 
 settings = Settings()
-engine = create_async_engine(settings.DB_URL, echo=True, future=True)
+engine = create_async_engine(f'mysql+aiomysql://{decrypt(settings.MYSQL_USER)}:{decrypt(settings.MYSQL_PWD)}@{decrypt(settings.MYSQL_HOST)}:{settings.MYSQL_PORT}/tfdb?charset=utf8mb4', echo=True, future=True)
 
 
 async def conn_db():

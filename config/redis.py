@@ -1,9 +1,7 @@
-from typing import Any
-
 import redis
 import json
-import logging
 
+from service.secure import decrypt
 from config.settings import Settings
 
 settings = Settings()
@@ -13,7 +11,7 @@ def get_redis_conn():
     if RedisWrapper.conn is not None:
         return RedisWrapper.conn
 
-    pool = redis.ConnectionPool(host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=0)
+    pool = redis.ConnectionPool(host=decrypt(settings.REDIS_HOST), port=settings.REDIS_PORT, db=0)
     r = redis.StrictRedis(connection_pool=pool, charset="utf-8", decode_responses=True)
     RedisWrapper.conn = r
     return r

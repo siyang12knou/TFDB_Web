@@ -1,5 +1,3 @@
-from typing import Optional
-
 from fastapi import Form
 from sqlmodel import SQLModel, Field
 
