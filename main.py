@@ -1,6 +1,6 @@
+import nest_asyncio
 import uvicorn
 from fastapi import FastAPI
-from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 from config.db import conn_db
@@ -9,6 +9,7 @@ from router.sample import sample_router
 from router.session import session_router
 from router.user import user_router
 
+nest_asyncio.apply()
 app = FastAPI()
 api_app = FastAPI(title="API")
 
@@ -27,4 +28,4 @@ async def on_startup():
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True, loop="asyncio")

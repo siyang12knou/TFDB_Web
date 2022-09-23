@@ -3,6 +3,7 @@ from pydantic import BaseSettings
 
 class Settings(BaseSettings):
     SECRET_KEY: str
+    TEMP_DIR: str
 
     MYSQL_HOST: str
     MYSQL_PORT: int

@@ -1,17 +1,31 @@
+import random
+from datetime import timedelta
+
 import redis
 import json
 
 from service.secure import decrypt
 from config.settings import Settings
+from fastapi_redis_session.config import basicConfig
 
 settings = Settings()
+host = decrypt(settings.REDIS_HOST)
+port = settings.REDIS_PORT
+db = 0
+
+basicConfig(
+    redisURL=f"redis://{host}:{port}/{db}",
+    sessionIdName="TFDB_SESSION",
+    sessionIdGenerator=lambda: str(random.randint(1000, 9999)),
+    expireTime=timedelta(minutes=30),
+    )
 
 
 def get_redis_conn():
     if RedisWrapper.conn is not None:
         return RedisWrapper.conn
 
-    pool = redis.ConnectionPool(host=decrypt(settings.REDIS_HOST), port=settings.REDIS_PORT, db=0)
+    pool = redis.ConnectionPool(host=host, port=port, db=db)
     r = redis.StrictRedis(connection_pool=pool, charset="utf-8", decode_responses=True)
     RedisWrapper.conn = r
     return r
