@@ -1,3 +1,5 @@
+import datetime
+
 from pydantic import BaseModel, EmailStr, constr
 from typing import Optional
 from sqlmodel import SQLModel, Field
@@ -19,6 +21,8 @@ class User(SQLModel, SystemInfo, table=True):
             regex=r"^\d{3}-\d{3,4}-\d{4}$",
         )
     ]
+    contract_start_date: Optional[datetime.date]
+    contract_end_date: Optional[datetime.date]
 
     class Config:
         schema_extra = {
@@ -29,6 +33,8 @@ class User(SQLModel, SystemInfo, table=True):
                 "email": "sample_other@example.com",
                 "tel": "010-3104-5284",
                 "role": "[\"TFDB\", \"Researcher\"]",
+                "contract_start_date": "2022-07-01",
+                "contract_end_date": "2022-11-31",
                 "enabled": 1,
                 "deleted": 0,
                 "created_date": "2022-06-23 16:14:11",
@@ -48,6 +54,8 @@ class UserOut(BaseModel):
             regex=r"^\d{3}-\d{3,4}-\d{4}$",
         )
     ]
+    contract_start_date: Optional[datetime.date]
+    contract_end_date: Optional[datetime.date]
 
     class Config:
         schema_extra = {
@@ -56,6 +64,8 @@ class UserOut(BaseModel):
                 "name": "100aquinas",
                 "email": "sample_other@example.com",
                 "tel": "010-3104-5284",
+                "contract_start_date": "2022-07-01",
+                "contract_end_date": "2022-11-31",
                 "role": "[\"TFDB\", \"WORKER\"]",
             }
         }

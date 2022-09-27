@@ -14,9 +14,14 @@ class ResultMessage(BaseModel):
         schema_extra = {
             "example": {
                 "result": False,
-                "message": "이미 존재하는 사용자입니다."
+                "message": "이미 존재하는 사용자입니다.",
+                "data": "json string"
             }
         }
+
+    @classmethod
+    def as_default(cls):
+        return cls(result=True, message="데이터 처리에 성공하였습니다.", data=None)
 
     @classmethod
     def as_data(cls, result=True, message: str = "", data: Any = None):

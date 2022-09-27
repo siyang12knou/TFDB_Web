@@ -1,3 +1,5 @@
+from datetime import date
+
 from fastapi import APIRouter, HTTPException, status, Depends, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_redis_session import getSession, getSessionStorage, SessionStorage, setSession, getSessionId, deleteSession
@@ -39,14 +41,29 @@ async def login_user(response: Response, user: OAuth2PasswordRequestForm = Depen
         logger.error(session, "login", message.login_not_exist.format(user_id=user.username), user.username)
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Sample with supplied ID does not exist"
+            detail=message.login_not_exist.format(user_id=user.username)
         )
 
     if not verify_hash(user.password, user_exist.password):
         logger.error(session, "login", message.login_pwd_fail, user.username)
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Wrong credentials passed"
+            detail=message.login_pwd_fail
+        )
+
+    if (user_exist.contract_start_date is not None and user_exist.contract_start_date > date.today()) or \
+            (user_exist.contract_end_date is not None and user_exist.contract_end_date < date.today()):
+        logger.error(session, "login", message.login_contract_fail, user.username)
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=message.login_contract_fail
+        )
+
+    if not user_exist.enabled:
+        logger.error(session, "login", message.login_enabled_fail, user.username)
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=message.login_enabled_fail
         )
 
     access_token = create_access_token(user_exist.id)
@@ -55,7 +72,7 @@ async def login_user(response: Response, user: OAuth2PasswordRequestForm = Depen
 
     token: TokenResponse = TokenResponse(token_type="Bearer", access_token=access_token)
     logger.info(session, "login", message.login.format(user_id=user.username), user.username)
-    return ResultMessage.as_data(message="User login successfully", data=token)
+    return ResultMessage.as_data(message=message.login.format(user_id=user.username), data=token)
 
 
 @session_router.post("/logout")
@@ -64,4 +81,4 @@ async def logout_user(user_id: str = Depends(authenticate), session=Depends(get_
                       session_storage: SessionStorage = Depends(getSessionStorage)) -> ResultMessage:
     deleteSession(session_id, session_storage)
     logger.info(session, "logout", message.logout.format(user_id=user_id), user_id)
-    return ResultMessage(message="User logout successfully")
+    return ResultMessage(message=message.logout.format(user_id=user_id))

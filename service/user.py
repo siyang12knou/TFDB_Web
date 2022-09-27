@@ -17,9 +17,9 @@ async def get_user(user_id: str, session: AsyncSession) -> User:
 async def save_user(user: User, session: AsyncSession, request_user_id: str = SYSTEM_USER_ID) -> User:
     user_exist: User = await session.get(User, user.id)
     if not user_exist:
-        return create_user(user, session, request_user_id)
+        return await create_user(user, session, request_user_id)
     else:
-        return update_user(user, session, user_exist, request_user_id)
+        return await update_user(user, session, user_exist, request_user_id)
 
 
 async def create_user(user: User, session: AsyncSession, request_user_id: str = SYSTEM_USER_ID) -> User:
@@ -30,7 +30,7 @@ async def create_user(user: User, session: AsyncSession, request_user_id: str = 
     user.modified_date = now
     if user.password:
         user.password = create_hash(user.password.strip())
-    if not user.type:
+    if not user.role:
         user.role = "[\"Visitor\"]"
     session.add(user)
     await session.commit()

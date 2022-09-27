@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 
 from config.db import get_session
+from create_worker import init_worker
 from model.result_message import ResultMessage
 from model.user import User
 from service.user import init_user, save_user
@@ -13,6 +14,11 @@ user_router = APIRouter(
 @user_router.get("/init")
 async def init(session=Depends(get_session)):
     await init_user(session)
+
+
+@user_router.get("/initWorker")
+async def initWorker(session=Depends(get_session)):
+    await init_worker(session)
 
 
 @user_router.post("/signup")
