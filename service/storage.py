@@ -4,12 +4,12 @@ from datetime import datetime
 from stat import S_ISDIR, filemode
 
 import paramiko
-from fastapi import Depends, UploadFile
+from fastapi import UploadFile
 from object_pool import ObjectPool
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from auth.authenticate import authenticate
-from config.db import get_session
+from config import message
+from config.constants import Action
 from config.settings import Settings
 from model.file_info import FileInfo
 from service import logger
@@ -65,7 +65,6 @@ class Storage:
                                           mode=filemode(entry.st_mode),
                                           last_modified=datetime.fromtimestamp(entry.st_mtime)))
 
-        logger.info(session, "storage.get_file_list", "저장소 폴더를 저장하였습니다.", user_id, {"dir": remote_dir})
         return file_list
 
     def download_file(self, remote_file_path: str, session: AsyncSession, user_id: str):
@@ -73,7 +72,7 @@ class Storage:
         with self.client.open_sftp() as sftp:
             sftp.get(remote_file_path, local_file_path)
 
-        logger.info(session, "storage.download_file", "파일을 다운로드 하였습니다.", user_id, {"file_path": remote_file_path})
+        logger.info(session, Action.download_file.name, message.download_file.format(user_id=user_id, file=remote_file_path), user_id)
 
         return local_file_path
 
@@ -81,7 +80,17 @@ class Storage:
         with self.client.open_sftp() as sftp:
             sftp.putfo(fl=upload_file.file, remotepath=remote_dir)
 
-        logger.info(session, "storage.download_file", "파일을 다운로드 하였습니다.", user_id, {"upload_file": upload_file.filename, "dir": remote_dir})
+        logger.info(session, Action.upload_file.name,
+                    message.upload_file.format(user_id=user_id, file=remote_dir + "/" + upload_file.filename),
+                    user_id)
+
+    def delete_file(self, remote_file_path: str, session: AsyncSession, user_id: str):
+        with self.client.open_sftp() as sftp:
+            sftp.remove(remote_file_path)
+
+        logger.info(session, Action.upload_file.name,
+                    message.delete_file.format(user_id=user_id, file=remote_file_path),
+                    user_id)
 
 
 storage_pool = ObjectPool(Storage, min_init=2)

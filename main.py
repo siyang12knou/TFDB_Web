@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
 from config.db import conn_db
+from router.log import log_router
 from router.project import project_router
 from router.sample import sample_router
 from router.session import session_router
@@ -17,6 +18,7 @@ api_app.include_router(session_router, prefix="/session")
 api_app.include_router(user_router, prefix="/user")
 api_app.include_router(project_router, prefix="/project")
 api_app.include_router(sample_router, prefix="/sample")
+api_app.include_router(log_router, prefix="/log")
 
 app.mount("/api/v1.0", api_app)
 app.mount("/", StaticFiles(directory="static", html=True), name="static")

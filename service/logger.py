@@ -4,22 +4,24 @@ from datetime import datetime
 
 from sqlmodel.ext.asyncio.session import AsyncSession
 
+from config.constants import Level, Action
+from config.db import get_session
 from model.log import Log
 
 
-def info(session: AsyncSession, action: str, message: str, user_id: str, data=None):
-    __log_sync__(session, "INFO", action, message, user_id, data)
+def info(session: AsyncSession, action: Action, message: str, user_id: str, created_date: datetime = datetime.now(), data=None):
+    __log_sync__(session, Level.INFO, action, message, user_id, created_date, data)
 
 
-def warning(session: AsyncSession, action: str, message: str, user_id: str, data=None):
-    __log_sync__(session, "WARNING", action, message, user_id, data)
+def warning(session: AsyncSession, action: Action, message: str, user_id: str, created_date: datetime = datetime.now(), data=None):
+    __log_sync__(session, Level.WARNING, action, message, user_id, created_date, data)
 
 
-def error(session: AsyncSession, action: str, message: str, user_id: str, data=None):
-    __log_sync__(session, "ERROR", action, message, user_id, data)
+def error(session: AsyncSession, action: Action, message: str, user_id: str, created_date: datetime = datetime.now(), data=None):
+    __log_sync__(session, Level.ERROR, action, message, user_id, created_date, data)
 
 
-def __log_sync__(session: AsyncSession, level: str, action: str, message: str, user_id: str, data):
+def __log_sync__(session: AsyncSession, level: Level, action: Action, message: str, user_id: str, created_date: datetime = datetime.now(), data=None):
     loop = None
     try:
         loop = asyncio.get_event_loop()
@@ -28,15 +30,17 @@ def __log_sync__(session: AsyncSession, level: str, action: str, message: str, u
         asyncio.set_event_loop(loop)
 
     if loop is not None:
-        coroutine = __log__(session, level, action, message, user_id, data)
+        coroutine = __log__(session, level, action, message, user_id, created_date, data)
         loop.run_until_complete(coroutine)
 
 
-async def __log__(session: AsyncSession, level: str, action: str, message: str, user_id: str, data):
-    log = Log(level=level, action=action, message=message, user_id=user_id,
+async def __log__(session: AsyncSession, level: Level, action: Action, message: str, user_id: str, created_date: datetime = datetime.now(), data=None):
+    log = Log(level=level.name, action=action.name, message=message, user_id=user_id,
               data=data if isinstance(data, str) else json.dumps(data) if None is not data else data,
-              created_date=datetime.now())
+              created_date=created_date)
+    print(f"log: {log}")
     session.add(log)
     await session.commit()
     await session.refresh(log)
     return log
+
