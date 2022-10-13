@@ -5,7 +5,6 @@ from datetime import datetime
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from config.constants import Level, Action
-from config.db import get_session
 from model.log import Log
 
 

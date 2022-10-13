@@ -1,7 +1,6 @@
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import BigInteger
 from sqlmodel import SQLModel, Field
 
 
